@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Search Members</h1>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <div>
+        {{ form.id_number.label }}<br>
+        {{ form.id_number(size=32) }}
+    </div>
+    <div>
+        {{ form.pat_no.label }}<br>
+        {{ form.pat_no(size=32) }}
+    </div>
+    <div>
+        {{ form.submit() }}
+    </div>
+</form>
+
+{% if members %}
+<h2>Search Results</h2>
+<table>
+    <tr>
+        <th>First Names</th>
+        <th>Surname</th>
+        <th>ID Number</th>
+        <th>PAT No</th>
+        <th>Ward</th>
+        <th>Region</th>
+        <th>Municipality</th>
+        <th>City</th>
+        <th>Province</th>
+        <th>IEC Registered</th>
+        <th>Voting District</th>
+        <th>View</th>
+    </tr>
+    {% for member in members %}
+    <tr>
+        <td>{{ member.first_names }}</td>
+        <td>{{ member.surname }}</td>
+        <td>{{ member.id_number }}</td>
+        <td>{{ member.pat_no }}</td>
+        <td>{{ member.ward }}</td>
+        <td>{{ member.region }}</td>
+        <td>{{ member.municipality }}</td>
+        <td>{{ member.city }}</td>
+        <td>{{ member.province }}</td>
+        <td>{{ member.iec_registered }}</td>
+        <td>{{ member.voting_district }}</td>
+	<td>
+            <!-- Link to view member details -->
+            <a href="{{ url_for('member.view_member', member_id=member.id) }}">View</a>
+        </td>
+
+    {% endfor %}
+</table>
+{% else %}
+    {% if request.method == 'POST' %}
+    <p>No members found matching the search criteria.</p>
+    {% endif %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,295 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Members</h1>
+
+
+    <!-- Export Button -->
+    <div class="mb-3">
+        <a href="{{ url_for('member.export_members') }}" class="btn btn-primary">Export to Excel</a>
+    </div>
+
+
+
+<!-- Filter Form -->
+<form method="GET" action="{{ url_for('member.members') }}">
+    <label for="street_address">Street Address:</label>
+    <input type="text" name="street_address" value="{{ request.args.get('street_address', '') }}">
+    
+    <label for="ward">Ward:</label>
+    <input type="text" name="ward" value="{{ request.args.get('ward', '') }}">
+    
+    <label for="region">Region:</label>
+    <input type="text" name="region" value="{{ request.args.get('region', '') }}">
+
+    <label for="municipality">Municipality:</label>
+    <input type="text" name="municipality" value="{{ request.args.get('municipality', '') }}">
+
+    <label for="city">City:</label>
+    <input type="text" name="city" value="{{ request.args.get('city', '') }}">
+
+    <label for="province">Province:</label>
+    <input type="text" name="province" value="{{ request.args.get('province', '') }}">
+
+    <label for="iec_registered">IEC Registered:</label>
+    <select name="iec_registered">
+        <option value="">Any</option>
+        <option value="Yes" {% if request.args.get('iec_registered') == 'Yes' %}selected{% endif %}>Yes</option>
+        <option value="No" {% if request.args.get('iec_registered') == 'No' %}selected{% endif %}>No</option>
+    </select>
+
+    <label for="voting_district">Voting District:</label>
+    <input type="text" name="voting_district" value="{{ request.args.get('voting_district', '') }}">
+
+    <button type="submit">Filter</button>
+    <a href="{{ url_for('member.members') }}"><button type="button">Clear Filters</button></a>
+</form>
+
+<!-- Members Table -->
+<table>
+    <tr>
+        <th>
+            <a href="{{ url_for('member.members', 
+                                sort_by='first_names', 
+                                order='asc' if request.args.get('order') == 'desc' else 'desc', 
+                                street_address=request.args.get('street_address', ''),
+                                ward=request.args.get('ward', ''),
+                                region=request.args.get('region', ''),
+                                municipality=request.args.get('municipality', ''),
+                                city=request.args.get('city', ''),
+                                province=request.args.get('province', ''),
+                                iec_registered=request.args.get('iec_registered', ''),
+                                voting_district=request.args.get('voting_district', '')
+                            ) }}">
+                First Name
+            </a>
+        </th>
+        <th>
+            <a href="{{ url_for('member.members', 
+                                sort_by='surname', 
+                                order='asc' if request.args.get('order') == 'desc' else 'desc', 
+                                street_address=request.args.get('street_address', ''),
+                                ward=request.args.get('ward', ''),
+                                region=request.args.get('region', ''),
+                                municipality=request.args.get('municipality', ''),
+                                city=request.args.get('city', ''),
+                                province=request.args.get('province', ''),
+                                iec_registered=request.args.get('iec_registered', ''),
+                                voting_district=request.args.get('voting_district', '')
+                            ) }}">
+                Surname
+            </a>
+        </th>
+        <th>
+            <a href="{{ url_for('member.members', 
+                                sort_by='id_number', 
+                                order='asc' if request.args.get('order') == 'desc' else 'desc', 
+                                street_address=request.args.get('street_address', ''),
+                                ward=request.args.get('ward', ''),
+                                region=request.args.get('region', ''),
+                                municipality=request.args.get('municipality', ''),
+                                city=request.args.get('city', ''),
+                                province=request.args.get('province', ''),
+                                iec_registered=request.args.get('iec_registered', ''),
+                                voting_district=request.args.get('voting_district', '')
+                            ) }}">
+                ID Number
+            </a>
+        </th>
+        <th>
+            <a href="{{ url_for('member.members', 
+                                sort_by='pat_no', 
+                                order='asc' if request.args.get('order') == 'desc' else 'desc', 
+                                street_address=request.args.get('street_address', ''),
+                                ward=request.args.get('ward', ''),
+                                region=request.args.get('region', ''),
+                                municipality=request.args.get('municipality', ''),
+                                city=request.args.get('city', ''),
+                                province=request.args.get('province', ''),
+                                iec_registered=request.args.get('iec_registered', ''),
+                                voting_district=request.args.get('voting_district', '')
+                            ) }}">
+                PAT No
+            </a>
+        </th>
+        <th>
+            <a href="{{ url_for('member.members', 
+                                sort_by='house_number', 
+                                order='asc' if request.args.get('order') == 'desc' else 'desc', 
+                                street_address=request.args.get('street_address', ''),
+                                ward=request.args.get('ward', ''),
+                                region=request.args.get('region', ''),
+                                municipality=request.args.get('municipality', ''),
+                                city=request.args.get('city', ''),
+                                province=request.args.get('province', ''),
+                                iec_registered=request.args.get('iec_registered', ''),
+                                voting_district=request.args.get('voting_district', '')
+                            ) }}">
+                House Number
+            </a>
+        </th>
+        <th>
+            <a href="{{ url_for('member.members', 
+                                sort_by='street_address', 
+                                order='asc' if request.args.get('order') == 'desc' else 'desc', 
+                                street_address=request.args.get('street_address', ''),
+                                ward=request.args.get('ward', ''),
+                                region=request.args.get('region', ''),
+                                municipality=request.args.get('municipality', ''),
+                                city=request.args.get('city', ''),
+                                province=request.args.get('province', ''),
+                                iec_registered=request.args.get('iec_registered', ''),
+                                voting_district=request.args.get('voting_district', '')
+                            ) }}">
+                Street Address
+            </a>
+        </th>
+        <th>
+            <a href="{{ url_for('member.members', 
+                                sort_by='ward', 
+                                order='asc' if request.args.get('order') == 'desc' else 'desc', 
+                                street_address=request.args.get('street_address', ''),
+                                ward=request.args.get('ward', ''),
+                                region=request.args.get('region', ''),
+                                municipality=request.args.get('municipality', ''),
+                                city=request.args.get('city', ''),
+                                province=request.args.get('province', ''),
+                                iec_registered=request.args.get('iec_registered', ''),
+                                voting_district=request.args.get('voting_district', '')
+                            ) }}">
+                Ward
+            </a>
+        </th>
+        <th>
+            <a href="{{ url_for('member.members', 
+                                sort_by='region', 
+                                order='asc' if request.args.get('order') == 'desc' else 'desc', 
+                                street_address=request.args.get('street_address', ''),
+                                ward=request.args.get('ward', ''),
+                                region=request.args.get('region', ''),
+                                municipality=request.args.get('municipality', ''),
+                                city=request.args.get('city', ''),
+                                province=request.args.get('province', ''),
+                                iec_registered=request.args.get('iec_registered', ''),
+                                voting_district=request.args.get('voting_district', '')
+                            ) }}">
+                Region
+            </a>
+        </th>
+        <th>
+            <a href="{{ url_for('member.members', 
+                                sort_by='municipality', 
+                                order='asc' if request.args.get('order') == 'desc' else 'desc', 
+                                street_address=request.args.get('street_address', ''),
+                                ward=request.args.get('ward', ''),
+                                region=request.args.get('region', ''),
+                                municipality=request.args.get('municipality', ''),
+                                city=request.args.get('city', ''),
+                                province=request.args.get('province', ''),
+                                iec_registered=request.args.get('iec_registered', ''),
+                                voting_district=request.args.get('voting_district', '')
+                            ) }}">
+                Municipality
+            </a>
+        </th>
+        <th>
+            <a href="{{ url_for('member.members', 
+                                sort_by='city', 
+                                order='asc' if request.args.get('order') == 'desc' else 'desc', 
+                                street_address=request.args.get('street_address', ''),
+                                ward=request.args.get('ward', ''),
+                                region=request.args.get('region', ''),
+                                municipality=request.args.get('municipality', ''),
+                                city=request.args.get('city', ''),
+                                province=request.args.get('province', ''),
+                                iec_registered=request.args.get('iec_registered', ''),
+                                voting_district=request.args.get('voting_district', '')
+                            ) }}">
+                City
+            </a>
+        </th>
+        <th>
+            <a href="{{ url_for('member.members', 
+                                sort_by='province', 
+                                order='asc' if request.args.get('order') == 'desc' else 'desc', 
+                                street_address=request.args.get('street_address', ''),
+                                ward=request.args.get('ward', ''),
+                                region=request.args.get('region', ''),
+                                municipality=request.args.get('municipality', ''),
+                                city=request.args.get('city', ''),
+                                province=request.args.get('province', ''),
+                                iec_registered=request.args.get('iec_registered', ''),
+                                voting_district=request.args.get('voting_district', '')
+                            ) }}">
+                Province
+            </a>
+        </th>
+        <th>
+            <a href="{{ url_for('member.members', 
+                                sort_by='iec_registered', 
+                                order='asc' if request.args.get('order') == 'desc' else 'desc', 
+                                street_address=request.args.get('street_address', ''),
+                                ward=request.args.get('ward', ''),
+                                region=request.args.get('region', ''),
+                                municipality=request.args.get('municipality', ''),
+                                city=request.args.get('city', ''),
+                                province=request.args.get('province', ''),
+                                iec_registered=request.args.get('iec_registered', ''),
+                                voting_district=request.args.get('voting_district', '')
+                            ) }}">
+                IEC Registered
+            </a>
+        </th>
+        <th>
+            <a href="{{ url_for('member.members', 
+                                sort_by='voting_district', 
+                                order='asc' if request.args.get('order') == 'desc' else 'desc', 
+                                street_address=request.args.get('street_address', ''),
+                                ward=request.args.get('ward', ''),
+                                region=request.args.get('region', ''),
+                                municipality=request.args.get('municipality', ''),
+                                city=request.args.get('city', ''),
+                                province=request.args.get('province', ''),
+                                iec_registered=request.args.get('iec_registered', ''),
+                                voting_district=request.args.get('voting_district', '')
+                            ) }}">
+                Voting District
+            </a>
+        </th>
+    </tr>
+    
+    {% for member in members %}
+    <tr>
+        <td><a href="{{ url_for('member.view_member', member_id=member.id) }}">{{ member.first_names }}</a></td>
+        <td>{{ member.surname }}</td>
+        <td>{{ member.id_number }}</td>
+        <td>{{ member.pat_no }}</td>
+        <td>{{ member.house_number }}</td>
+        <td>{{ member.street_address }}</td>
+        <td>{{ member.ward }}</td>
+        <td>{{ member.region }}</td>
+        <td>{{ member.municipality }}</td>
+        <td>{{ member.city }}</td>
+        <td>{{ member.province }}</td>
+        <td>{{ member.iec_registered }}</td>
+        <td>{{ member.voting_district }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+
+<!-- Pagination -->
+<div class="pagination">
+    {% if members.has_prev %}
+        <a href="{{ url_for('member.members', page=members.prev_num) }}">Previous</a>
+    {% endif %}
+    <span>Page {{ members.page }} of {{ members.pages }}</span>
+    {% if members.has_next %}
+        <a href="{{ url_for('member.members', page=members.next_num) }}">Next</a>
+    {% endif %}
+</div>
+
+
+
+
+{% endblock %}

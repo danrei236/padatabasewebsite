@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Edit Member</h1>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <div>
+        {{ form.first_names.label }}<br>
+        {{ form.first_names(size=32) }}
+    </div>
+    <div>
+        {{ form.surname.label }}<br>
+        {{ form.surname(size=32) }}
+    </div>
+    <div>
+        {{ form.id_number.label }}<br>
+        {{ form.id_number(size=32) }}
+    </div>
+    <div>
+        {{ form.gender.label }}<br>
+        {{ form.gender() }}
+    </div>
+    <div>
+        {{ form.language.label }}<br>
+        {{ form.language() }}
+    </div>
+    <div>
+        {{ form.mobile_number.label }}<br>
+        {{ form.mobile_number(size=32) }}
+    </div>
+    <div>
+        {{ form.alternative_number.label }}<br>
+        {{ form.alternative_number(size=32) }}
+    </div>
+    <div>
+        {{ form.ward.label }}<br>
+        {{ form.ward(size=32) }}
+    </div>
+    <div>
+        {{ form.region.label }}<br>
+        {{ form.region(size=32) }}
+    </div>
+    <div>
+        {{ form.municipality.label }}<br>
+        {{ form.municipality(size=32) }}
+    </div>
+    <div>
+        {{ form.house_number.label }}<br>
+        {{ form.house_number(size=32) }}
+    </div>
+    <div>
+        {{ form.street_address.label }}<br>
+        {{ form.street_address(size=32) }}
+    </div>
+    <div>
+        {{ form.suburb.label }}<br>
+        {{ form.suburb(size=32) }}
+    </div>
+    <div>
+        {{ form.city.label }}<br>
+        {{ form.city(size=32) }}
+    </div>
+    <div>
+        {{ form.province.label }}<br>
+        {{ form.province(size=32) }}
+    </div>
+    <div>
+        {{ form.postal_code.label }}<br>
+        {{ form.postal_code(size=32) }}
+    </div>
+    <div>
+        {{ form.iec_registered.label }}<br>
+        {{ form.iec_registered() }}
+    </div>
+    <div>
+        {{ form.pat_no.label }}<br>
+        {{ form.pat_no(size=32) }}
+    </div>
+    <div>
+        {{ form.voting_district.label }}<br>
+        {{ form.voting_district(size=32) }}
+    </div>
+    <div>
+        {{ form.submit() }}
+    </div>
+</form>
+{% endblock %}
