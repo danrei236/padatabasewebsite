@@ -1,5 +1,6 @@
 import pandas as pd
 from flask import Blueprint, render_template, redirect, url_for, flash, request, Response
+from werkzeug.security import generate_password_hash, check_password_hash
 from app import db
 from app.models import Member
 from app.forms import MemberForm, SearchForm
@@ -9,12 +10,18 @@ main_routes = Blueprint('main', __name__)
 member_routes = Blueprint('member', __name__)
 
 # Default Admin Password
-ADMIN_PASSWORD = "AdminPA#2025"
+ADMIN_PASSWORD_HASH = generate_password_hash("AdminPA#2025")
 
 # Main Routes
 @main_routes.route('/')
 def home():
-    return render_template('home.html')
+
+    total_members = Member.query.count()  # Count total members in the database
+    return render_template('home.html', total_members=total_members)
+    
+    #return render_template('home.html')
+
+    
 
 # Member Routes
 @member_routes.route('/members')
@@ -99,7 +106,7 @@ def edit_member(member_id):
 
     if form.validate_on_submit():
         password = request.form.get("admin_password")
-        if password != ADMIN_PASSWORD:
+        if not check_password_hash(ADMIN_PASSWORD_HASH, password):
             flash("Incorrect password! Member details not updated.", "danger")
             return redirect(url_for('member.view_member', member_id=member.id))
 
@@ -136,7 +143,7 @@ def delete_member(member_id):
     member = Member.query.get_or_404(member_id)
 
     password = request.form.get("admin_password")
-    if password != ADMIN_PASSWORD:
+    if not check_password_hash(ADMIN_PASSWORD_HASH, password):
         flash("Incorrect password! Member not deleted.", "danger")
         return redirect(url_for('member.view_member', member_id=member.id))
 
@@ -171,7 +178,7 @@ def view_member(member_id):
 
     if form.validate_on_submit():
         password = request.form.get("admin_password")
-        if password != ADMIN_PASSWORD:
+        if not check_password_hash(ADMIN_PASSWORD_HASH, password):
             flash("Incorrect password! Member details not updated.", "danger")
             return redirect(url_for('member.view_member', member_id=member.id))
 
@@ -202,7 +209,7 @@ def view_member(member_id):
 
     if request.method == 'POST' and 'delete' in request.form:
         password = request.form.get("admin_password")
-        if password != ADMIN_PASSWORD:
+        if not check_password_hash(ADMIN_PASSWORD_HASH, password):
             flash("Incorrect password! Member not deleted.", "danger")
             return redirect(url_for('member.view_member', member_id=member.id))
 

@@ -181,3 +181,25 @@ table tr:hover {
     margin-left: auto;          /* Center horizontally */
     margin-right: auto;
 }
+
+/* Responsive Images */
+.responsive-img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto; /* Centers the image if it's not full width */
+}
+
+/* For your specific logo image */
+.pa-logo {
+    max-width: 1200px;
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    /* ... your existing mobile styles ... */
+    
+    .pa-logo {
+        padding: 0 15px; /* Adds some spacing on mobile */
+    }
+}
