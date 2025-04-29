@@ -1,4 +1,4 @@
--members count does not show.
+-members count does not show. Done	
 -Export function error
--password does not work
--Remove delete button
+-password does not work - Change to an easy one "admin10"
+-Remove delete button - Done
