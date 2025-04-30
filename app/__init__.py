@@ -1,31 +1,15 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from config import Config
 from flask_migrate import Migrate
-import os
 
 migrate = Migrate()
 db = SQLAlchemy()
 
-def fix_database_url(url):
-    """
-    Ensure the DATABASE_URL uses 'postgresql://' instead of 'postgres://'.
-    """
-    if url and url.startswith("postgres://"):
-        return url.replace("postgres://", "postgresql://", 1)
-    return url
-
-def create_app(config_class=None):
+def create_app(config_class=Config):
     app = Flask(__name__)
+    app.config.from_object(config_class)
 
-    # Load configuration
-    if config_class:
-        app.config.from_object(config_class)
-    else:
-        # Fallback to environment-based DATABASE_URL
-        app.config['SQLALCHEMY_DATABASE_URI'] = fix_database_url(os.getenv('DATABASE_URL'))
-        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-    # Initialize extensions
     db.init_app(app)
     migrate.init_app(app, db)
 
@@ -35,4 +19,3 @@ def create_app(config_class=None):
     app.register_blueprint(member_routes)
 
     return app
-
