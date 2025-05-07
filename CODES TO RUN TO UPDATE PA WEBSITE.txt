@@ -1,4 +1,4 @@
-cd C:\Users\Admin\Desktop\political_party
+C:\Users\danre\Desktop\political_party
 git add .
 git commit -m "update Database"
 git branch -M main
