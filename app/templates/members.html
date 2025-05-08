@@ -6,7 +6,20 @@
 
     <!-- Export Button -->
     <div class="mb-3">
-        <a href="{{ url_for('member.export_members') }}" class="btn btn-primary">Export to Excel</a>
+        <a href="{{ url_for('member.export_members', 
+        street_address=request.args.get('street_address', ''),
+        ward=request.args.get('ward', ''),
+        region=request.args.get('region', ''),
+        municipality=request.args.get('municipality', ''),
+        city=request.args.get('city', ''),
+        province=request.args.get('province', ''),
+        iec_registered=request.args.get('iec_registered', ''),
+        voting_district=request.args.get('voting_district', ''),
+        sort_by=request.args.get('sort_by', ''),
+        order=request.args.get('order', '')) }}" 
+        class="btn btn-success">
+        Export To Excel File
+    </a>
     </div>
 
 

@@ -1,9 +1,11 @@
 import pandas as pd
+import io
 from flask import Blueprint, render_template, redirect, url_for, flash, request, Response
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import db
 from app.models import Member
 from app.forms import MemberForm, SearchForm
+from datetime import datetime
 
 # Define Blueprints
 main_routes = Blueprint('main', __name__)
@@ -223,9 +225,29 @@ def view_member(member_id):
 # Export Members to Excel
 @member_routes.route('/export_members')
 def export_members():
-    # Query all members from the database
-    members = Member.query.all()
+    # Get the same filtering parameters as in the members() route
+    filters = []
+    if request.args.get('street_address'):
+        filters.append(Member.street_address.like(f"%{request.args.get('street_address')}%"))
+    if request.args.get('ward'):
+        filters.append(Member.ward.like(f"%{request.args.get('ward')}%"))
+    if request.args.get('region'):
+        filters.append(Member.region.like(f"%{request.args.get('region')}%"))
+    if request.args.get('municipality'):
+        filters.append(Member.municipality.like(f"%{request.args.get('municipality')}%"))
+    if request.args.get('city'):
+        filters.append(Member.city.like(f"%{request.args.get('city')}%"))
+    if request.args.get('province'):
+        filters.append(Member.province.like(f"%{request.args.get('province')}%"))
+    if request.args.get('iec_registered'):
+        filters.append(Member.iec_registered == request.args.get('iec_registered'))
+    if request.args.get('voting_district'):
+        filters.append(Member.voting_district.like(f"%{request.args.get('voting_district')}%"))
 
+    # Query filtered members from the database
+    members = Member.query.filter(*filters).all()
+
+    
     # Prepare data to export
     data = []
     for member in members:
@@ -248,10 +270,22 @@ def export_members():
     # Convert the data to a pandas DataFrame
     df = pd.DataFrame(data)
 
-    # Create a response object to return the Excel file
-    output = Response(
-        df.to_excel(index=False, engine='openpyxl'),
-        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    )
-    output.headers['Content-Disposition'] = 'attachment; filename=members.xlsx'
-    return output
+    # Create an in-memory bytes buffer for the Excel file
+    output = io.BytesIO()
+    
+    # Write the DataFrame to this buffer
+    with pd.ExcelWriter(output, engine='openpyxl') as writer:
+        df.to_excel(writer, index=False, sheet_name='Members')
+
+    # Seek to the beginning of the stream
+    output.seek(0)
+    
+
+    # Create a Flask response with the appropriate headers
+    return Response(
+    output,
+    mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    headers={
+        'Content-Disposition': f"attachment; filename=members_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
+    }
+)
